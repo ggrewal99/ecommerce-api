@@ -1,4 +1,4 @@
-const Product = require('../models/Product');
+const Product = require('../models/product');
 
 const getAllProducts = async (req, res) => {
     try {
@@ -10,16 +10,16 @@ const getAllProducts = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-    const { id, title, price, description, category, image } = req.body;
+    const { name, price, description, category, image, size } = req.body;
 
     try {
         const newProduct = new Product({
-            id,
-            title,
+            name,
             price,
             description,
             category,
-            image
+            image,
+            size
         });
 
         await newProduct.save();
