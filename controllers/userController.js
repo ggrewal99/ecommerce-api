@@ -154,10 +154,20 @@ const updateOtherUser = async (req, res) => {
 	}
 };
 
+const getAllUsers = async (req, res) => {
+	try {
+		const users = await User.find({ role: 'user' });
+		res.status(200).json({ users });
+	} catch (error) {
+		res.status(500).json({ message: 'Error getting users', error });
+	}
+};
+
 module.exports = {
 	registerUser,
 	loginUser,
 	updateUser,
 	updateOtherUser,
 	loginAdmin,
+	getAllUsers,
 };
