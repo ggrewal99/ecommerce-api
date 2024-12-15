@@ -2,10 +2,27 @@ const Product = require('../models/product');
 
 const getAllProducts = async (req, res) => {
 	try {
-		const products = await Product.find().populate('category', 'name');
-		res.status(200).json(products);
+		const page = parseInt(req.query.page) || 1;
+		const limit = parseInt(req.query.limit) || 10;
+		const skip = (page - 1) * limit;
+		const total = await Product.countDocuments();
+
+		const products = await Product.find()
+			.populate('category', 'name')
+			.skip(skip)
+			.limit(limit)
+			.sort({ createdAt: -1 });
+
+		res.status(200).json({
+			total,
+			page,
+			limit,
+			totalPages: Math.ceil(total / limit),
+			products,
+		});
 	} catch (e) {
-		res.status(500).json({ message: 'Error fetching products', e });
+		console.error(e.stack);
+		res.status(500).json({ message: 'Error fetching products', error: e });
 	}
 };
 
