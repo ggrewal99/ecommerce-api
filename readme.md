@@ -1,83 +1,235 @@
-# E-Commerce Project
+# E-Commerce API Documentation
 
 ## Overview
 
-This is an E-commerce API which includes products and users (orders api will be added soon).
+This project is an E-commerce API designed to manage users, products, and eventually orders. The current version includes features for user management, product retrieval, and product creation by admins.
 
 ## Features
 
--   User registration, login and update
--   Update other users (admin only)
--   Get products
--   Create products (admin only)
+- **User Management**
+  - Register, login, and update user profiles.
+  - Admins can update other users.
+- **Product Management**
+  - Retrieve all products.
+  - Create, update, and delete products (admin only).
+- **Category Management**
+  - Retrieve all categories.
+  - Create, update, and delete categories (admin only).
 
 ## Technologies Used
 
--   **Backend**: Node.js
--   **Database**: MongoDB
--   **Libraries**: Mongoose, Axios, Bcrypt, JSON Web Token (JWT)
--   **Environment Management**: dotenv
+- **Backend**: Node.js
+- **Database**: MongoDB
+- **Libraries**: Mongoose, Axios, Bcrypt, JSON Web Token (JWT)
+- **Environment Management**: dotenv
 
-## Usage
+## API Endpoints
 
--   #### Get all products: /api/products
+### Product Endpoints
 
-    Send a GET request to /api/products.
+#### 1. **Get All Products**
+**Endpoint**: `GET /api/products?page=1&limit=10`
 
--   #### Create a product: /api/products
+**Description**: Retrieve a list of all available products with pagination support.
 
-    (Admin access required) Send a POST request to /api/products with the following body:
+**Query Parameters**:
+- `page`: Page number (default: 1).
+- `limit`: Number of products per page (default: 10).
 
-    ```bash
-        {
-            "id": 21,
-            "title": "Test",
-            "price": 99,
-            "description": "description",
-            "category": "Shoes",
-            "image": "link"
-        }
-    ```
+---
 
--   #### Register: /api/register
+#### 2. **Create a Product**
+**Endpoint**: `POST /api/products`
 
-    Send a POST request to /api/register with the following body:
+**Description**: Add a new product. Admin access is required.
 
-    ```bash
-          {
-              "name": "User Name",
-              "email": "user@example.com",
-              "password": "yourpassword"
-          }
-    ```
+**Request Body**:
+```json
+{
+    "name": "Test Product",
+    "price": 99.99,
+    "description": "Product description",
+    "category": "category_id",
+    "imageUrl": "link_to_image",
+    "sizes": [
+        { "size": "M", "stock": 10 },
+        { "size": "L", "stock": 5 }
+    ]
+}
+```
 
--   #### Login: /api/login
+---
 
-    Send a POST request to /api/login with the following body:
+#### 3. **Update a Product**
+**Endpoint**: `PUT /api/products/:id`
 
-    ```bash
-      {
-          "email": "user@example.com",
-          "password": "yourpassword"
-      }
-    ```
+**Description**: Update an existing product by ID. Admin access is required.
 
--   #### Update user: /api/users/update
+**Request Body**:
+```json
+{
+    "name": "Updated Product",
+    "price": 89.99,
+    "description": "Updated description",
+    "category": "new_category_id",
+    "imageUrl": "new_image_link",
+    "sizes": [
+        { "size": "S", "stock": 8 },
+        { "size": "XL", "stock": 12 }
+    ]
+}
+```
 
-    Send a PUT request to /api/users/update with the following body:
+---
 
-    ```bash
-      {
-          "name": "Updated name"
-      }
-    ```
+#### 4. **Delete a Product**
+**Endpoint**: `DELETE /api/products/:id`
 
--   #### Update user: /api/users/update/:id
+**Description**: Delete a product by ID. Admin access is required.
 
-    (Admin access required) Send a PUT request to /api/users/update/:id with the following body:
+---
 
-    ```bash
-      {
-          "role": "admin"
-      }
-    ```
+### Category Endpoints
+
+#### 1. **Get All Categories**
+**Endpoint**: `GET /api/categories`
+
+**Description**: Retrieve all available categories.
+
+---
+
+#### 2. **Get Category by ID**
+**Endpoint**: `GET /api/categories/:id`
+
+**Description**: Retrieve a single category by its ID.
+
+---
+
+#### 3. **Create a Category**
+**Endpoint**: `POST /api/categories`
+
+**Description**: Add a new category. Admin access is required.
+
+**Request Body**:
+```json
+{
+    "name": "Category Name",
+    "description": "Category Description"
+}
+```
+
+---
+
+#### 4. **Update a Category**
+**Endpoint**: `PUT /api/categories/:id`
+
+**Description**: Update an existing category by ID. Admin access is required.
+
+**Request Body**:
+```json
+{
+    "name": "Updated Category Name",
+    "description": "Updated Category Description"
+}
+```
+
+---
+
+#### 5. **Delete a Category**
+**Endpoint**: `DELETE /api/categories/:id`
+
+**Description**: Delete a category by ID. Admin access is required.
+
+---
+
+### User Endpoints
+
+#### 1. **Register a User**
+**Endpoint**: `POST /api/register`
+
+**Description**: Register a new user.
+
+**Request Body**:
+```json
+{
+    "name": "User Name",
+    "email": "user@example.com",
+    "password": "yourpassword"
+}
+```
+
+---
+
+#### 2. **Login a User**
+**Endpoint**: `POST /api/login`
+
+**Description**: Log in an existing user.
+
+**Request Body**:
+```json
+{
+    "email": "user@example.com",
+    "password": "yourpassword"
+}
+```
+
+---
+
+#### 3. **Update User Profile**
+**Endpoint**: `PUT /api/users/update`
+
+**Description**: Update the logged-in user's profile.
+
+**Request Body**:
+```json
+{
+    "name": "Updated Name"
+}
+```
+
+---
+
+#### 4. **Update Other Users** (Admin Only)
+**Endpoint**: `PUT /api/users/update/:id`
+
+**Description**: Update another user's profile. Admin access is required.
+
+**Request Body**:
+```json
+{
+    "role": "admin"
+}
+```
+
+---
+
+#### 5. **Get All Users** (Admin Only)
+**Endpoint**: `GET /api/users`
+
+**Description**: Retrieve a list of all users with role `user`.
+
+---
+
+#### 6. **Delete a User** (Admin Only)
+**Endpoint**: `DELETE /api/users/:id`
+
+**Description**: Delete a user by ID. Admin access is required.
+
+---
+
+## Notes
+
+- Ensure to include a valid JWT token in the `Authorization` header for endpoints requiring authentication.
+- Use the `.env` file to manage sensitive data like database credentials and JWT secrets.
+
+---
+
+## Future Plans
+
+- Implement order management API endpoints.
+- Implement pagination for user retrieval for the admin dashboard.
+
+---
+
+Feel free to raise issues or contribute to this project on GitHub!
+
